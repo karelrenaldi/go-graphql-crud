@@ -1,0 +1,36 @@
+scalar Time
+
+"Type for KTP"
+type Ktp {
+  id : ID!
+  nik: String!
+  nama: String!
+  jenis_kelamin: String!
+  tanggal_lahir: Time!
+  alamat: String!
+  agama: String!
+  createdAt : Time!
+	updatedAt : Time
+}
+
+"Input body for update and input Ktp"
+input KtpBody {
+  nik: String!
+  nama: String!
+  jenis_kelamin: String!
+  tanggal_lahir: String!
+  alamat: String!
+  agama: String!
+}
+
+type Query {
+  ktp: [Ktp!]!
+}
+
+type Mutation {
+  createKtp(input: KtpBody!): Ktp!
+  deleteKtp(id: ID!) : Boolean!
+  editKtp(id: ID!, input: KtpBody!) : Ktp!
+}
+
+
