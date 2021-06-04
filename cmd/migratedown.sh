@@ -1,0 +1,1 @@
+migrate -path ../migrations -database "mysql://root:root@(0.0.0.0:5000)/ktp_db?charset=utf8mb4&parseTime=True&loc=Local" -verbose down

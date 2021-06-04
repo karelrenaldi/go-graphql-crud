@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+    ktp-db:
+        image: mariadb:10.3
+        ports: 
+            - 3306:3306
+        environment:
+            - MYSQL_ROOT_PASSWORD=root
+            - MYSQL_USER=supremokr
+            - MYSQL_DATABASE=ktp_db
+        networks: 
+            - ktp-network
+    
+    ktp-app:
+        working_dir: /app
+        build: .
+        ports:
+            - 8080:8080
+        networks: 
+            - ktp-network
+        restart: always
+        depends_on: 
+            - ktp-db
+    
+networks: 
+    ktp-network:
+        driver: bridge

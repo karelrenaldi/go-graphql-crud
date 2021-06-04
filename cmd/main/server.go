@@ -5,7 +5,6 @@ import (
 	"mariadb/configs/database"
 	"mariadb/graph"
 	"mariadb/graph/generated"
-	"mariadb/internal/models"
 	"net/http"
 	"os"
 
@@ -16,13 +15,11 @@ import (
 const defaultPort = "8080"
 
 func main() {
+	// Database Connect
 	err := database.ConnectDB()
-
 	if err != nil {
 		log.Fatal(err)
 	}
-
-	database.DB.AutoMigrate(&models.Ktp{})
 
 	port := os.Getenv("PORT")
 	if port == "" {

@@ -295,7 +295,10 @@ type Mutation {
   createKtp(input: KtpBody!): Ktp!
   deleteKtp(id: ID!) : Boolean!
   editKtp(id: ID!, input: KtpBody!) : Ktp!
-}`, BuiltIn: false},
+}
+
+
+`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
 

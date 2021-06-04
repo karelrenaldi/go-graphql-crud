@@ -1,9 +1,6 @@
 package database
 
 import (
-	//"os"
-	"fmt"
-
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 )
@@ -15,15 +12,14 @@ var (
 
 // ConnectDB connects this application to database instance.
 func ConnectDB() error {
-	h := "0.0.0.0"
+	// TODO: change with environtment variable
+	h := "ktp-db"
 	u := "root"
 	pwd := "root"
-	p := "5000"
+	p := "3306"
 	d := "ktp_db"
 
 	dsn := u + ":" + pwd + "@tcp(" + h + ":" + p + ")/" + d + "?charset=utf8mb4&parseTime=True&loc=Local"
-
-	fmt.Println(dsn)
 
 	dbConnection, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {

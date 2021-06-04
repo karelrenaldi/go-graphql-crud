@@ -4,23 +4,26 @@ import (
 	"context"
 	"mariadb/configs/database"
 	"mariadb/graph/model"
+	"mariadb/internal/helpers"
 	"mariadb/internal/models"
 	"time"
 )
 
-func stringToDate(value string) time.Time {
-	var layoutFormat = "2006-01-02 15:04:05"
-	var date, _ = time.Parse(layoutFormat, value)
+/*
+	@desc Function for create new ktp data
 
-	return date
-}
+	@param ctx(context.Context) : context
+	@param input(model.KtpBody) : input value for new ktp data
 
+	@output (*models.Ktp) : data value
+	@output (error) : error
+*/
 func CreateKtpHandler(ctx context.Context, input model.KtpBody) (*models.Ktp, error) {
 	ktp := models.Ktp{
 		NIK:           input.Nik,
 		Nama:          input.Nama,
 		Jenis_kelamin: input.JenisKelamin,
-		Tanggal_lahir: stringToDate(input.TanggalLahir),
+		Tanggal_lahir: helpers.StringToDate(input.TanggalLahir),
 		Alamat:        input.Alamat,
 		Agama:         input.Agama,
 		CreatedAt:     time.Now(),
@@ -35,6 +38,15 @@ func CreateKtpHandler(ctx context.Context, input model.KtpBody) (*models.Ktp, er
 	return &ktp, nil
 }
 
+/*
+	@desc Function for delete data by id
+
+	@param id(int64) : id's data
+	@param ctx(context.Context) : context
+
+	@output (bool) : boolean value for delete status
+	@output (error) : error
+*/
 func DeleteKtpHandler(ctx context.Context, id int64) (bool, error) {
 	res := database.DB.Delete(&models.Ktp{}, id)
 
@@ -45,13 +57,23 @@ func DeleteKtpHandler(ctx context.Context, id int64) (bool, error) {
 	return true, nil
 }
 
+/*
+	@desc Function for create new ktp data
+
+	@param ctx(context.Context) : context
+	@param id(int64) : id's data
+	@param input(model.KtpBody) : input value for update ktp data
+
+	@output (*models.Ktp) : updated data value
+	@output (error) : error
+*/
 func EditKtpHandler(ctx context.Context, id int64, input model.KtpBody) (*models.Ktp, error) {
 	// Assumption where update all fields get updated
 	newKtp := models.Ktp{
 		NIK:           input.Nik,
 		Nama:          input.Nama,
 		Jenis_kelamin: input.JenisKelamin,
-		Tanggal_lahir: stringToDate(input.TanggalLahir),
+		Tanggal_lahir: helpers.StringToDate(input.TanggalLahir),
 		Alamat:        input.Alamat,
 		Agama:         input.Agama,
 		UpdatedAt:     time.Now(),
@@ -65,6 +87,14 @@ func EditKtpHandler(ctx context.Context, id int64, input model.KtpBody) (*models
 	return &newKtp, nil
 }
 
+/*
+	@desc Function for get all ktp data
+
+	@param ctx(context.Context) : context
+
+	@output ([]*models.Ktp) : list of data value
+	@output (error) : error
+*/
 func GetAllKtpHandler(ctx context.Context) ([]*models.Ktp, error) {
 	var ktp []*models.Ktp
 	res := database.DB.Find(&ktp)
