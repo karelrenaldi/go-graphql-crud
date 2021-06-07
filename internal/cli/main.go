@@ -134,10 +134,12 @@ Database drivers: `+strings.Join(database.List(), ", ")+"\n", createUsage, gotoU
 		// p := "3306"
 		// d := "exam_engine_db"
 
-		h := "ktp-db"
+		// h := "ktp-db"
+		h := "0.0.0.0"
 		u := "root"
 		pwd := "root"
-		p := "3306"
+		// p := "3306"
+		p := "5000"
 		d := "ktp_db"
 
 		dsn := "mysql://" + u + ":" + pwd + "@tcp(" + h + ":" + p + ")/" + d + "?charset=utf8mb4&parseTime=True&loc=Local"

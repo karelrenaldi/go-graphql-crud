@@ -1,6 +1,6 @@
 scalar Time
 
-"Type for KTP"
+"KTP is main object"
 type Ktp {
   id : ID!
   nik: String!
@@ -23,8 +23,35 @@ input KtpBody {
   agama: String!
 }
 
+"Object that is being paginated"
+type PaginationEdgeKtp {
+  node : Ktp!
+  cursor: ID!
+}
+
+"Information about pagination"
+type PaginationInfo {
+  endCursor: ID!
+  hasNextPage: Boolean!
+}
+
+"Result when querying list using graphql"
+type PaginationResultKtp {
+  totalCount: Int!
+  edges: [PaginationEdgeKtp!]!
+  pageInfo: PaginationInfo!
+}
+
+"Default input pagination"
+input Pagination {
+  first: Int!
+  offset: Int!
+  after: ID
+}
+
 type Query {
   ktp: [Ktp!]!
+  paginationKtp(input: Pagination!): PaginationResultKtp!
 }
 
 type Mutation {
@@ -32,5 +59,3 @@ type Mutation {
   deleteKtp(id: ID!) : Boolean!
   editKtp(id: ID!, input: KtpBody!) : Ktp!
 }
-
-

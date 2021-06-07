@@ -2,6 +2,10 @@
 
 package model
 
+import (
+	"mariadb/internal/models"
+)
+
 // Input body for update and input Ktp
 type KtpBody struct {
 	Nik          string `json:"nik"`
@@ -10,4 +14,30 @@ type KtpBody struct {
 	TanggalLahir string `json:"tanggal_lahir"`
 	Alamat       string `json:"alamat"`
 	Agama        string `json:"agama"`
+}
+
+// Default input pagination
+type Pagination struct {
+	First  int64  `json:"first"`
+	Offset int64  `json:"offset"`
+	After  *int64 `json:"after"`
+}
+
+// Object that is being paginated
+type PaginationEdgeKtp struct {
+	Node   *models.Ktp `json:"node"`
+	Cursor int64       `json:"cursor"`
+}
+
+// Information about pagination
+type PaginationInfo struct {
+	EndCursor   int64 `json:"endCursor"`
+	HasNextPage bool  `json:"hasNextPage"`
+}
+
+// Result when querying list using graphql
+type PaginationResultKtp struct {
+	TotalCount int64                `json:"totalCount"`
+	Edges      []*PaginationEdgeKtp `json:"edges"`
+	PageInfo   *PaginationInfo      `json:"pageInfo"`
 }

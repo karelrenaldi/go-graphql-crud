@@ -27,6 +27,10 @@ func (r *queryResolver) Ktp(ctx context.Context) ([]*models.Ktp, error) {
 	return handlers.GetAllKtpHandler(ctx)
 }
 
+func (r *queryResolver) PaginationKtp(ctx context.Context, input model.Pagination) (*model.PaginationResultKtp, error) {
+	return handlers.GetPaginationKtpHandler(ctx, input)
+}
+
 // Mutation returns generated.MutationResolver implementation.
 func (r *Resolver) Mutation() generated.MutationResolver { return &mutationResolver{r} }
 

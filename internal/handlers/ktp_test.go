@@ -109,3 +109,36 @@ func TestUpdateKtp(t *testing.T) {
 		t.Error(err)
 	}
 }
+
+func TestPaginationKtp(t *testing.T) {
+	// create a client (safe to share across requests)
+	var client = graphql.NewClient("http://localhost:8080/query")
+
+	var req = graphql.NewRequest(`
+		query {
+			paginationKtp(input : {first : 5, offset: 0, after: 1}) {
+				totalCount
+				edges {
+					node {
+					id
+					nama        
+					}
+					cursor
+				}
+				pageInfo {
+					endCursor
+					hasNextPage
+				}
+			}
+		}	  
+	`)
+
+	// define a Context for the request
+	ctx := context.Background()
+
+	// run it and capture the response
+	var respData map[string]interface{}
+	if err := client.Run(ctx, req, &respData); err != nil {
+		t.Error(err)
+	}
+}

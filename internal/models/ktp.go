@@ -3,9 +3,9 @@ package models
 import "time"
 
 type Ktp struct {
-	ID            int64
+	ID            int64 `gorm:"primaryKey;autoIncrement:true"`
 	Nama          string
-	NIK           string
+	NIK           string `gorm:"unique;not null"`
 	Jenis_kelamin string
 	Tanggal_lahir time.Time
 	Alamat        string
