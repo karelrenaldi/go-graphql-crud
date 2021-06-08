@@ -18,21 +18,23 @@ type KtpBody struct {
 
 // Default input pagination
 type Pagination struct {
-	First  int64  `json:"first"`
-	Offset int64  `json:"offset"`
-	After  *int64 `json:"after"`
+	First  int64    `json:"first"`
+	Offset int64    `json:"offset"`
+	After  *int64   `json:"after"`
+	Query  string   `json:"query"`
+	Sort   []string `json:"sort"`
 }
 
 // Object that is being paginated
 type PaginationEdgeKtp struct {
 	Node   *models.Ktp `json:"node"`
-	Cursor int64       `json:"cursor"`
+	Cursor string      `json:"cursor"`
 }
 
 // Information about pagination
 type PaginationInfo struct {
-	EndCursor   int64 `json:"endCursor"`
-	HasNextPage bool  `json:"hasNextPage"`
+	EndCursor   string `json:"endCursor"`
+	HasNextPage bool   `json:"hasNextPage"`
 }
 
 // Result when querying list using graphql

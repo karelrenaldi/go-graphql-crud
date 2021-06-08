@@ -2,6 +2,7 @@ package models
 
 import "time"
 
+// Ktp is struct for ktp table in databases
 type Ktp struct {
 	ID            int64 `gorm:"primaryKey;autoIncrement:true"`
 	Nama          string

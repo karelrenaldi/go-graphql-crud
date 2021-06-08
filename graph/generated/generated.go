@@ -369,12 +369,12 @@ input KtpBody {
 "Object that is being paginated"
 type PaginationEdgeKtp {
   node : Ktp!
-  cursor: ID!
+  cursor: String!
 }
 
 "Information about pagination"
 type PaginationInfo {
-  endCursor: ID!
+  endCursor: String!
   hasNextPage: Boolean!
 }
 
@@ -387,9 +387,11 @@ type PaginationResultKtp {
 
 "Default input pagination"
 input Pagination {
-  first: Int!
-  offset: Int!
-  after: ID
+  first: Int! # Total item will be loaded
+  offset: Int! # Total item will be skipped
+  after: ID # Start Cursor
+  query: String! # Query string (NIK, Nama)
+  sort: [String!]! # Sort by
 }
 
 type Query {
@@ -401,10 +403,7 @@ type Mutation {
   createKtp(input: KtpBody!): Ktp!
   deleteKtp(id: ID!) : Boolean!
   editKtp(id: ID!, input: KtpBody!) : Ktp!
-}
-
-
-`, BuiltIn: false},
+}`, BuiltIn: false},
 }
 var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
@@ -1037,9 +1036,9 @@ func (ec *executionContext) _PaginationEdgeKtp_cursor(ctx context.Context, field
 		}
 		return graphql.Null
 	}
-	res := resTmp.(int64)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNID2int64(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PaginationInfo_endCursor(ctx context.Context, field graphql.CollectedField, obj *model.PaginationInfo) (ret graphql.Marshaler) {
@@ -1072,9 +1071,9 @@ func (ec *executionContext) _PaginationInfo_endCursor(ctx context.Context, field
 		}
 		return graphql.Null
 	}
-	res := resTmp.(int64)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalNID2int64(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PaginationInfo_hasNextPage(ctx context.Context, field graphql.CollectedField, obj *model.PaginationInfo) (ret graphql.Marshaler) {
@@ -2542,6 +2541,22 @@ func (ec *executionContext) unmarshalInputPagination(ctx context.Context, obj in
 			if err != nil {
 				return it, err
 			}
+		case "query":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("query"))
+			it.Query, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "sort":
+			var err error
+
+			ctx := graphql.WithPathContext(ctx, graphql.NewPathWithField("sort"))
+			it.Sort, err = ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		}
 	}
 
@@ -3255,6 +3270,36 @@ func (ec *executionContext) marshalNString2string(ctx context.Context, sel ast.S
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) unmarshalNString2ᚕstringᚄ(ctx context.Context, v interface{}) ([]string, error) {
+	var vSlice []interface{}
+	if v != nil {
+		if tmp1, ok := v.([]interface{}); ok {
+			vSlice = tmp1
+		} else {
+			vSlice = []interface{}{v}
+		}
+	}
+	var err error
+	res := make([]string, len(vSlice))
+	for i := range vSlice {
+		ctx := graphql.WithPathContext(ctx, graphql.NewPathWithIndex(i))
+		res[i], err = ec.unmarshalNString2string(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) marshalNString2ᚕstringᚄ(ctx context.Context, sel ast.SelectionSet, v []string) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	for i := range v {
+		ret[i] = ec.marshalNString2string(ctx, sel, v[i])
+	}
+
+	return ret
 }
 
 func (ec *executionContext) unmarshalNTime2timeᚐTime(ctx context.Context, v interface{}) (time.Time, error) {

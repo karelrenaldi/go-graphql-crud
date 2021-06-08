@@ -114,14 +114,32 @@ func TestPaginationKtp(t *testing.T) {
 	// create a client (safe to share across requests)
 	var client = graphql.NewClient("http://localhost:8080/query")
 
-	var req = graphql.NewRequest(`
+	var req1 = graphql.NewRequest(`
 		query {
 			paginationKtp(input : {first : 5, offset: 0, after: 1}) {
 				totalCount
 				edges {
 					node {
-					id
-					nama        
+					  id
+					  nama        
+					}
+					cursor
+				}
+				pageInfo {
+					endCursor
+					hasNextPage
+				}
+			}
+		}	  
+	`)
+	var req2 = graphql.NewRequest(`
+		query {
+			paginationKtp(input : {second : 5, offset: 0, after: 1}) {
+				totalCount
+				edges {
+					node {
+					  id
+					  nama        
 					}
 					cursor
 				}
@@ -138,7 +156,10 @@ func TestPaginationKtp(t *testing.T) {
 
 	// run it and capture the response
 	var respData map[string]interface{}
-	if err := client.Run(ctx, req, &respData); err != nil {
+	if err := client.Run(ctx, req1, &respData); err != nil {
 		t.Error(err)
+	}
+	if err := client.Run(ctx, req2, &respData); err == nil {
+		t.Error("This test case should be invalid")
 	}
 }

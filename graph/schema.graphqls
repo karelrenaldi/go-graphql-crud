@@ -26,12 +26,12 @@ input KtpBody {
 "Object that is being paginated"
 type PaginationEdgeKtp {
   node : Ktp!
-  cursor: ID!
+  cursor: String!
 }
 
 "Information about pagination"
 type PaginationInfo {
-  endCursor: ID!
+  endCursor: String!
   hasNextPage: Boolean!
 }
 
@@ -44,9 +44,11 @@ type PaginationResultKtp {
 
 "Default input pagination"
 input Pagination {
-  first: Int!
-  offset: Int!
-  after: ID
+  first: Int! # Total item will be loaded
+  offset: Int! # Total item will be skipped
+  after: ID # Start Cursor
+  query: String! # Query string (NIK, Nama)
+  sort: [String!]! # Sort by
 }
 
 type Query {
